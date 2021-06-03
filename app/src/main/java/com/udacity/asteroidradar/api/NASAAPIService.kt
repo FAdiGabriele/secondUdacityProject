@@ -34,8 +34,8 @@ interface NASAAPIPictureService {
 }
 
 interface NASAAPIAsteroidService {
-    @GET("neo/rest/v1/feed")
-    fun getAsteroids(@Query(value="start_date", encoded=true) startDate : String, @Query(value="end_date", encoded=true) endDate : String, @Query(value="api_key", encoded=true) apiKey : String ) : Call<List<Asteroid>>
+    @GET("neo/rest/v1/feed?")
+    fun getAsteroids(@Query(value="start_date") startDate : String, @Query(value="end_date") endDate : String, @Query(value="api_key") apiKey : String ) : Call<List<Asteroid>>
 }
 
 object NASAApi {

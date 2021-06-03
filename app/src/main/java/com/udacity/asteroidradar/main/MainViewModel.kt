@@ -16,18 +16,22 @@ import retrofit2.Response
 import java.util.*
 
 class MainViewModel : ViewModel() {
-    private var _response = MutableLiveData<String>()
-    val response : LiveData<String>
-        get() = _response
+    private var _pictureResponse = MutableLiveData<String>()
+    val pictureResponse : LiveData<String>
+        get() = _pictureResponse
+
+    private var _asteroidsResponse = MutableLiveData<List<Asteroid>>()
+    val asteroidsResponse : LiveData<List<Asteroid>>
+        get() = _asteroidsResponse
 
     fun getPictureOfTheDay() {
         retrofitPictureService.getPicturesOfTheDay().enqueue( object: Callback<PictureOfDay> {
             override fun onFailure(call: Call<PictureOfDay>, t: Throwable) {
-                _response.value = "Failure: " + t.message
+                _pictureResponse.value = "Failure: " + t.message
             }
 
             override fun onResponse(call: Call<PictureOfDay>, response: Response<PictureOfDay>) {
-                _response.value = response.body()?.url
+                _pictureResponse.value = response.body()?.url
             }
         })
     }
@@ -35,14 +39,14 @@ class MainViewModel : ViewModel() {
     fun getAsteroidList(){
         retrofitAsteroidsService.getAsteroids(getActualDateFormatted(), getNextSevenDaysDateFormatted(), API_KEY).enqueue( object: Callback<List<Asteroid>>{
             override fun onFailure(call: Call<List<Asteroid>>, t: Throwable) {
-                TODO("Not yet implemented")
+                _asteroidsResponse.value = mutableListOf(Asteroid(0, "Failure: $t","error",0.0,0.0,0.0,0.0,false ))
             }
 
             override fun onResponse(
                 call: Call<List<Asteroid>>,
                 response: Response<List<Asteroid>>
             ) {
-                TODO("Not yet implemented")
+                _asteroidsResponse.value = response.body()
             }
 
         })

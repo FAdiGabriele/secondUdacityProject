@@ -3,10 +3,11 @@ package com.udacity.asteroidradar.main
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.squareup.picasso.Picasso
+import com.udacity.asteroidradar.models.Asteroid
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
 import com.udacity.asteroidradar.util.AsteroidAdapter
@@ -22,20 +23,24 @@ class MainFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        binding = FragmentMainBinding.inflate(inflater)
+        binding = FragmentMainBinding.inflate(inflater,container,false)
         binding.lifecycleOwner = this
 
         binding.viewModel = viewModel
         viewModel.getPictureOfTheDay()
-        viewModel.getAsteroidList()
+        //viewModel.getAsteroidList()
 
-        binding.asteroidRecycler.adapter =
-            AsteroidAdapter(AsteroidListener { asteroid ->
-                val args = Bundle()
-                args.putParcelable("selectedAsteroid", asteroid)
-                findNavController().navigate(R.id.action_showDetail, args)
-            })
+        val adapter = AsteroidAdapter(AsteroidListener{ asteroid ->
+            val args = Bundle()
+            args.putParcelable("selectedAsteroid", asteroid)
+            findNavController().navigate(R.id.action_showDetail, args)
+        })
+        adapter.submitList(listOf(
+                Asteroid(0,"codename","24/10/2022", 1.0, 1.0, 2.0, 3.0, true ),
+                Asteroid(0,"pippo","13/10/2022", 1.0, 1.0, 2.0, 3.0, false )
+        ))
 
+        binding.asteroidRecycler.adapter = adapter
         setHasOptionsMenu(true)
 
         return binding.root
@@ -44,17 +49,25 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.response.observe(viewLifecycleOwner) {responseValue ->
+        viewModel.pictureResponse.observe(viewLifecycleOwner, Observer {responseValue ->
             if(responseValue.isBlank()){
                 //TODO vedi cosa fare
             }else{
                 if(responseValue.contains("Failure: ")){
                     //TODO vedi cosa fare
                 }else{
-                    Picasso.with(context).load(responseValue).into(binding.activityMainImageOfTheDay);
+                    Picasso.get().load(responseValue).into(binding.activityMainImageOfTheDay)
                 }
             }
-        }
+        })
+
+        viewModel.asteroidsResponse.observe(viewLifecycleOwner, Observer {responseValue ->
+            if(responseValue[0].codename.contains("Failure") || responseValue.isEmpty()){
+                //TODO vedi cosa fare
+            }else{
+                (binding.asteroidRecycler.adapter as AsteroidAdapter).submitList(responseValue)
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
