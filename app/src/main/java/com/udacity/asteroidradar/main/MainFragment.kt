@@ -28,7 +28,7 @@ class MainFragment : Fragment() {
 
         binding.viewModel = viewModel
         viewModel.getPictureOfTheDay()
-        //viewModel.getAsteroidList()
+        viewModel.getAsteroidList()
 
         val adapter = AsteroidAdapter(AsteroidListener{ asteroid ->
             val args = Bundle()
@@ -63,7 +63,7 @@ class MainFragment : Fragment() {
 
         viewModel.asteroidsResponse.observe(viewLifecycleOwner, Observer {responseValue ->
             if(responseValue[0].codename.contains("Failure") || responseValue.isEmpty()){
-                //TODO vedi cosa fare
+                (binding.asteroidRecycler.adapter as AsteroidAdapter).submitList(responseValue)
             }else{
                 (binding.asteroidRecycler.adapter as AsteroidAdapter).submitList(responseValue)
             }

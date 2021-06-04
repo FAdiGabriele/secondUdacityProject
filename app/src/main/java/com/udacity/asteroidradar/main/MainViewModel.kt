@@ -1,8 +1,10 @@
 package com.udacity.asteroidradar.main
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.gson.Gson
 import com.udacity.asteroidradar.api.NASAApi.retrofitAsteroidsService
 import com.udacity.asteroidradar.api.NASAApi.retrofitPictureService
 import com.udacity.asteroidradar.models.Asteroid
@@ -10,10 +12,12 @@ import com.udacity.asteroidradar.models.PictureOfDay
 import com.udacity.asteroidradar.util.Constants.API_KEY
 import com.udacity.asteroidradar.util.getActualDateFormatted
 import com.udacity.asteroidradar.util.getNextSevenDaysDateFormatted
+import com.udacity.asteroidradar.util.parseAsteroidsJsonResult
+import org.json.JSONArray
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.*
 
 class MainViewModel : ViewModel() {
     private var _pictureResponse = MutableLiveData<String>()
@@ -37,19 +41,24 @@ class MainViewModel : ViewModel() {
     }
 
     fun getAsteroidList(){
-        retrofitAsteroidsService.getAsteroids(getActualDateFormatted(), getNextSevenDaysDateFormatted(), API_KEY).enqueue( object: Callback<List<Asteroid>>{
-            override fun onFailure(call: Call<List<Asteroid>>, t: Throwable) {
-                _asteroidsResponse.value = mutableListOf(Asteroid(0, "Failure: $t","error",0.0,0.0,0.0,0.0,false ))
+        val call = retrofitAsteroidsService.getAsteroids(getActualDateFormatted(), getNextSevenDaysDateFormatted(), API_KEY)
+        call.enqueue( object: Callback<Any>{
+            override fun onFailure(call: Call<Any>, t: Throwable) {
+                Log.e("NANIFALLIS", "Failure: $t")
+                _asteroidsResponse.value = mutableListOf(Asteroid(0, "Failure","error",0.0,0.0,0.0,0.0,false ))
             }
 
             override fun onResponse(
-                call: Call<List<Asteroid>>,
-                response: Response<List<Asteroid>>
+                call: Call<Any>,
+                response: Response<Any>
             ) {
-                _asteroidsResponse.value = response.body()
+                val json = JSONObject(Gson().toJson(response.body()!!))
+                val list = parseAsteroidsJsonResult(json)
+                _asteroidsResponse.value = list
             }
 
         })
+
     }
 
 
