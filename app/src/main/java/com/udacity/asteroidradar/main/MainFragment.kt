@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.squareup.picasso.Picasso
 import com.udacity.asteroidradar.models.Asteroid
 import com.udacity.asteroidradar.R
+import com.udacity.asteroidradar.database.getDatabase
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
 import com.udacity.asteroidradar.util.AsteroidAdapter
 import com.udacity.asteroidradar.util.AsteroidListener
@@ -16,6 +17,7 @@ import com.udacity.asteroidradar.util.AsteroidListener
 class MainFragment : Fragment() {
 
     private lateinit var binding: FragmentMainBinding
+    private val db = getDatabase(requireContext())
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProvider(this).get(MainViewModel::class.java)
@@ -50,22 +52,19 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.pictureResponse.observe(viewLifecycleOwner, Observer {responseValue ->
-            if(responseValue.isBlank()){
+            if(responseValue.isBlank() || responseValue.contains("Failure: ")){
                 //TODO vedi cosa fare
             }else{
-                if(responseValue.contains("Failure: ")){
-                    //TODO vedi cosa fare
-                }else{
                     Picasso.get().load(responseValue).into(binding.activityMainImageOfTheDay)
-                }
             }
         })
 
         viewModel.asteroidsResponse.observe(viewLifecycleOwner, Observer {responseValue ->
             if(responseValue[0].codename.contains("Failure") || responseValue.isEmpty()){
-                (binding.asteroidRecycler.adapter as AsteroidAdapter).submitList(responseValue)
+                    //todo vedi cosa fare
             }else{
-                (binding.asteroidRecycler.adapter as AsteroidAdapter).submitList(responseValue)
+                    db.asteroidDaoDao.insertAllFromList(responseValue)
+                    (binding.asteroidRecycler.adapter as AsteroidAdapter).submitList(responseValue)
             }
         })
     }

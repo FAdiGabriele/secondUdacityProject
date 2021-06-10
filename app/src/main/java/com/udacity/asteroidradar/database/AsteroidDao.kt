@@ -12,6 +12,9 @@ interface AsteroidDao{
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg videos: Asteroid)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAllFromList(listvideos: List<Asteroid>)
+
     @Update
     suspend fun update(night: Asteroid)
 

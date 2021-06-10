@@ -9,17 +9,19 @@ import com.udacity.asteroidradar.models.Asteroid
 @Database(entities = [Asteroid::class], version = 1)
 abstract class AsteroidsDatabase : RoomDatabase() {
 
-    abstract val asteroidDaoDao: AsteroidDao
-    private lateinit var INSTANCE: AsteroidsDatabase
+    abstract val asteroidDao: AsteroidDao
 
-    fun getDatabase(context: Context): AsteroidsDatabase {
-        synchronized(AsteroidsDatabase::class.java) {
-            if (!::INSTANCE.isInitialized) {
-                INSTANCE = Room.databaseBuilder(context.applicationContext,
-                        AsteroidsDatabase::class.java,
-                        "asteroids").build()
-            }
+}
+
+private lateinit var INSTANCE: AsteroidsDatabase
+
+fun getDatabase(context: Context): AsteroidsDatabase {
+    synchronized(AsteroidsDatabase::class.java) {
+        if (!::INSTANCE.isInitialized) {
+            INSTANCE = Room.databaseBuilder(context.applicationContext,
+                AsteroidsDatabase::class.java,
+                "asteroids").build()
         }
-        return INSTANCE
     }
+    return INSTANCE
 }

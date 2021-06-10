@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.udacity.asteroidradar.api.NASAApi.retrofitAsteroidsService
 import com.udacity.asteroidradar.api.NASAApi.retrofitPictureService
+import com.udacity.asteroidradar.database.AsteroidsDatabase
+import com.udacity.asteroidradar.database.getDatabase
 import com.udacity.asteroidradar.models.Asteroid
 import com.udacity.asteroidradar.models.PictureOfDay
 import com.udacity.asteroidradar.util.Constants.API_KEY
