@@ -17,14 +17,14 @@ import com.udacity.asteroidradar.util.AsteroidListener
 class MainFragment : Fragment() {
 
     private lateinit var binding: FragmentMainBinding
-    private val db = getDatabase(requireContext())
+
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProvider(this).get(MainViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
         binding = FragmentMainBinding.inflate(inflater,container,false)
         binding.lifecycleOwner = this
 
@@ -37,10 +37,8 @@ class MainFragment : Fragment() {
             args.putParcelable("selectedAsteroid", asteroid)
             findNavController().navigate(R.id.action_showDetail, args)
         })
-        adapter.submitList(listOf(
-                Asteroid(0,"codename","24/10/2022", 1.0, 1.0, 2.0, 3.0, true ),
-                Asteroid(0,"pippo","13/10/2022", 1.0, 1.0, 2.0, 3.0, false )
-        ))
+        //TODO: aggiorna con i valori presi dalla cache
+        adapter.submitList(listOf())
 
         binding.asteroidRecycler.adapter = adapter
         setHasOptionsMenu(true)
@@ -63,7 +61,6 @@ class MainFragment : Fragment() {
             if(responseValue[0].codename.contains("Failure") || responseValue.isEmpty()){
                     //todo vedi cosa fare
             }else{
-                    db.asteroidDaoDao.insertAllFromList(responseValue)
                     (binding.asteroidRecycler.adapter as AsteroidAdapter).submitList(responseValue)
             }
         })

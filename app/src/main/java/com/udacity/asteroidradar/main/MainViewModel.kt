@@ -1,6 +1,8 @@
 package com.udacity.asteroidradar.main
 
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,7 +23,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainViewModel : ViewModel() {
+class MainViewModel(application : Application) : AndroidViewModel(application) {
+
+    private val db = getDatabase(application)
+
     private var _pictureResponse = MutableLiveData<String>()
     val pictureResponse : LiveData<String>
         get() = _pictureResponse
@@ -56,6 +61,7 @@ class MainViewModel : ViewModel() {
             ) {
                 val json = JSONObject(Gson().toJson(response.body()!!))
                 val list = parseAsteroidsJsonResult(json)
+                db.asteroidDao.insertAllFromList(list)
                 _asteroidsResponse.value = list
             }
 

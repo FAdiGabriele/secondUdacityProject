@@ -9,14 +9,12 @@ import kotlinx.coroutines.withContext
 
 class VideosRepository(private val database: AsteroidsDatabase) {
 
-    val asteroids: LiveData<List<Asteroid>> = Transformations.map(database.asteroidDao.getAsteroids()) {
-        it.asDomainModel()
-    }
+    val asteroids: LiveData<List<Asteroid>> = Transformations.map(database.asteroidDao.getAsteroids()) { it }
 
     suspend fun refreshVideos() {
         withContext(Dispatchers.IO) {
-            val playlist = Network.devbytes.getPlaylist().await()
-            database.videoDao.insertAll(*playlist.asDatabaseModel())
+           // val playlist = Network.devbytes.getPlaylist().await()
+            //database.asteroidDao.insertAll()
         }
     }
 }
