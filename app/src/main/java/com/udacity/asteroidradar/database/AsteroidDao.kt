@@ -10,22 +10,22 @@ interface AsteroidDao{
     suspend fun insert(night: Asteroid)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(vararg videos: Asteroid)
+    suspend fun insertAll(vararg videos: Asteroid)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAllFromList(listvideos: List<Asteroid>)
+    suspend fun insertAllFromList(listvideos: List<Asteroid>)
 
     @Update
-    fun update(night: Asteroid)
+    suspend fun update(night: Asteroid)
 
     @Query("SELECT * from asteroid WHERE id = :key")
-    fun get(key: Long): Asteroid?
+    suspend fun get(key: Long): Asteroid?
 
     @Query("SELECT * from asteroid")
     fun getAsteroids(): LiveData<List<Asteroid>>
 
     @Query("DELETE FROM asteroid WHERE close_approach_date ")
-    fun clearOldAsteroid()
+    suspend fun clearOldAsteroid()
 
 
 }
