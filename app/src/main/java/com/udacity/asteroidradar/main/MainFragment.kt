@@ -1,6 +1,7 @@
 package com.udacity.asteroidradar.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -30,7 +31,6 @@ class MainFragment : Fragment() {
 
         binding.viewModel = viewModel
         viewModel.getPictureOfTheDay()
-        viewModel.getAsteroidList()
 
         val adapter = AsteroidAdapter(AsteroidListener{ asteroid ->
             val args = Bundle()
@@ -51,15 +51,15 @@ class MainFragment : Fragment() {
 
         viewModel.pictureResponse.observe(viewLifecycleOwner, Observer {responseValue ->
             if(responseValue.isBlank() || responseValue.contains("Failure: ")){
-                //TODO vedi cosa fare
+                Log.e("mimmo", "nn img qui")
             }else{
                     Picasso.get().load(responseValue).into(binding.activityMainImageOfTheDay)
             }
         })
 
         viewModel.asteroidsResponse.observe(viewLifecycleOwner, Observer {responseValue ->
-            if(responseValue[0].codename.contains("Failure") || responseValue.isEmpty()){
-                    //todo vedi cosa fare
+            if(responseValue.isNullOrEmpty()){
+                Log.e("mimmo", "e niente")
             }else{
                     (binding.asteroidRecycler.adapter as AsteroidAdapter).submitList(responseValue)
             }
