@@ -41,7 +41,18 @@ class MainViewModel(application : Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             asteroidsRepository.refreshAsteroids()
         }
-        asteroidsRepository.asteroids.observeForever {
+        getWeeklyAsteroids()
+
+    }
+
+    fun getWeeklyAsteroids(){
+        asteroidsRepository.weeklyAsteroids.observeForever {
+            _asteroidsResponse.value = it
+        }
+    }
+
+    fun getDailyAsteroids(){
+        asteroidsRepository.dailyAsteroids.observeForever {
             _asteroidsResponse.value = it
         }
     }

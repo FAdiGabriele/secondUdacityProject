@@ -19,8 +19,10 @@ import kotlinx.coroutines.withContext as withContext
 
 class AsteroidsRepository(private val database: AsteroidsDatabase) {
 
-    val asteroids: LiveData<List<Asteroid>> = Transformations.map(
-        database.asteroidDao.getAsteroids()) { it }
+    val dailyAsteroids: LiveData<List<Asteroid>> = Transformations.map(
+        database.asteroidDao.getTodayAsteroids(getActualDateFormatted())) { it }
+    val weeklyAsteroids: LiveData<List<Asteroid>> = Transformations.map(
+            database.asteroidDao.getAsteroids()) { it }
 
     fun refreshAsteroids() {
 
@@ -37,7 +39,7 @@ class AsteroidsRepository(private val database: AsteroidsDatabase) {
             })
     }
 
-    fun insertAll(asteroidList: List<Asteroid>){
+    private fun insertAll(asteroidList: List<Asteroid>){
         CoroutineScope(Dispatchers.IO).launch {
             database.asteroidDao.insertAllFromList(asteroidList)
         }
@@ -49,7 +51,5 @@ class AsteroidsRepository(private val database: AsteroidsDatabase) {
             database.asteroidDao.deleteOldAsteroids(actualWeek)
         }
     }
-
-
 
 }

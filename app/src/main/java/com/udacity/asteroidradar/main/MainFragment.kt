@@ -95,7 +95,14 @@ class MainFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        //TODO: set filters from menu
+        when(item.itemId){
+            R.id.show_today_asteroids->{
+                viewModel.getDailyAsteroids()
+            }
+            R.id.show_week_asteroids->{
+                viewModel.getWeeklyAsteroids()
+            }
+        }
         return true
     }
 }

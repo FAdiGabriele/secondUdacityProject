@@ -24,6 +24,9 @@ interface AsteroidDao{
     @Query("SELECT * FROM asteroid ORDER BY close_approach_date")
     fun getAsteroids(): LiveData<List<Asteroid>>
 
+    @Query("SELECT * FROM asteroid WHERE close_approach_date = :today")
+    fun getTodayAsteroids(today : String): LiveData<List<Asteroid>>
+
     @Query("DELETE FROM asteroid WHERE close_approach_date NOT IN (:actualWeek)")
     suspend fun deleteOldAsteroids(actualWeek :ArrayList<String>)
 
