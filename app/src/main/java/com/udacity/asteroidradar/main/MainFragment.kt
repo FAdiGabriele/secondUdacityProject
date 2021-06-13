@@ -62,6 +62,7 @@ class MainFragment : Fragment() {
                 Asteroid(FAKE5_ID, FAKE5_CODENAME, FAKE5_DATE, DEFAULT_FAKE_VALUE, DEFAULT_FAKE_VALUE, DEFAULT_FAKE_VALUE, DEFAULT_FAKE_VALUE, false)
         ))
 
+        binding.statusLoadingWheel.visibility = View.VISIBLE
         binding.asteroidRecycler.adapter = adapter
         setHasOptionsMenu(true)
 
@@ -73,10 +74,12 @@ class MainFragment : Fragment() {
 
         viewModel.pictureResponse.observe(viewLifecycleOwner, Observer { responseValue ->
             if (responseValue == null || !responseValue.mediaType.contains("image")) {
+                binding.statusLoadingWheel.visibility = View.GONE
                 Toast.makeText(requireContext(), resources.getString(R.string.image_of_the_day_not_loaded), Toast.LENGTH_SHORT).show()
                 binding.activityMainImageOfTheDay.contentDescription= resources.getString(R.string.this_is_nasa_s_picture_of_day_showing_nothing_yet)
             } else {
                 Picasso.get().load(responseValue.url).into(binding.activityMainImageOfTheDay)
+                binding.statusLoadingWheel.visibility = View.GONE
                 binding.activityMainImageOfTheDay.contentDescription= String.format(resources.getString(R.string.nasa_picture_of_day_content_description_format), responseValue.title )
             }
         })

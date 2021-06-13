@@ -11,7 +11,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <!-- I forced the portrait orientation because all the fragments of this activity
+               are structured for showing a list or for giving details on the element
+               then the portrait mode is more comfortable and
+               the user doesn't need to care about disable auto-rotation -->
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
