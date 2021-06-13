@@ -23,6 +23,6 @@
     <string name="nasa_picture_of_day_content_description_format">NASA\'s picture of day: %s</string>
 
     <!-- Toast messages -->
-    <string name="image_of_the_day_not_loaded">The image of the day was not found, please try again</string>
+    <string name="image_of_the_day_not_loaded">The image of the day was not found</string>
     <string name="asteroid_list_not_loaded">Failed to load asteroids from cache, please close and reopen the app</string>
 </resources>

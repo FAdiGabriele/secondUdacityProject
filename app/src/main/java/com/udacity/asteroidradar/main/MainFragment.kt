@@ -72,8 +72,8 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.pictureResponse.observe(viewLifecycleOwner, Observer { responseValue ->
-            if (responseValue == null) {
-                Toast.makeText(requireContext(), resources.getString(R.string.image_of_the_day_not_loaded), Toast.LENGTH_LONG).show()
+            if (responseValue == null || !responseValue.mediaType.contains("image")) {
+                Toast.makeText(requireContext(), resources.getString(R.string.image_of_the_day_not_loaded), Toast.LENGTH_SHORT).show()
                 binding.activityMainImageOfTheDay.contentDescription= resources.getString(R.string.this_is_nasa_s_picture_of_day_showing_nothing_yet)
             } else {
                 Picasso.get().load(responseValue.url).into(binding.activityMainImageOfTheDay)
