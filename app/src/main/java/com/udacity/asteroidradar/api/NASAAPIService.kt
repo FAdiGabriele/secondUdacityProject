@@ -13,30 +13,30 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 private val moshi = Moshi.Builder()
-    .add(KotlinJsonAdapterFactory())
-    .build()
+        .add(KotlinJsonAdapterFactory())
+        .build()
 
 private val moshiRetrofit = Retrofit.Builder()
-    .addConverterFactory(MoshiConverterFactory.create(moshi))
-    .baseUrl(BASE_URL)
-    .build()
+        .addConverterFactory(MoshiConverterFactory.create(moshi))
+        .baseUrl(BASE_URL)
+        .build()
 
-private val scalarRetrofit  = Retrofit.Builder()
-    .addConverterFactory(GsonConverterFactory.create())
-    .baseUrl(BASE_URL)
-    .build()
+private val scalarRetrofit = Retrofit.Builder()
+        .addConverterFactory(GsonConverterFactory.create())
+        .baseUrl(BASE_URL)
+        .build()
 
 interface NASAAPIPictureService {
     @GET("planetary/apod?api_key=${API_KEY}")
-    fun getPicturesOfTheDay() : Call<PictureOfDay>
+    fun getPicturesOfTheDay(): Call<PictureOfDay>
 }
 
 interface NASAAPIAsteroidService {
     @GET("neo/rest/v1/feed?")
-    fun getAsteroids(@Query(value="start_date") startDate : String, @Query(value="end_date") endDate : String, @Query(value="api_key") apiKey : String ) : Call<Any>
+    fun getAsteroids(@Query(value = "start_date") startDate: String, @Query(value = "end_date") endDate: String, @Query(value = "api_key") apiKey: String): Call<Any>
 }
 
 object NASAApi {
-    val retrofitPictureService : NASAAPIPictureService by lazy { moshiRetrofit.create(NASAAPIPictureService::class.java) }
-    val retrofitAsteroidsService :  NASAAPIAsteroidService by lazy { scalarRetrofit.create(NASAAPIAsteroidService::class.java) }
+    val retrofitPictureService: NASAAPIPictureService by lazy { moshiRetrofit.create(NASAAPIPictureService::class.java) }
+    val retrofitAsteroidsService: NASAAPIAsteroidService by lazy { scalarRetrofit.create(NASAAPIAsteroidService::class.java) }
 }

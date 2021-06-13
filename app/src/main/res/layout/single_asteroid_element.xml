@@ -3,14 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-
     <data>
+
         <variable
             name="asteroid"
             type="com.udacity.asteroidradar.models.Asteroid" />
 
         <variable
-            name="clickListener" type="com.udacity.asteroidradar.util.AsteroidListener"/>
+            name="clickListener"
+            type="com.udacity.asteroidradar.util.AsteroidListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,13 +21,14 @@
 
         <TextView
             android:id="@+id/asteroid_name"
+            style="@style/StandardBlankText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:text="@{asteroid.codename}"
-            android:textColor="@color/default_text_color"
+            android:contentDescription="@{asteroid.codename}"
             app:layout_constraintEnd_toStartOf="@+id/imageView"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -36,12 +38,13 @@
 
         <TextView
             android:id="@+id/asteroid_date_approach"
+            style="@style/StandardBlankText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
             android:text="@{asteroid.closeApproachDate}"
-            android:textColor="@color/default_text_color"
+            android:contentDescription="@{asteroid.closeApproachDate}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/asteroid_name"
             app:layout_constraintHorizontal_bias="0.0"
@@ -59,6 +62,6 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/asteroid_name"
             app:layout_constraintTop_toTopOf="parent"
-            app:statusIcon="@{asteroid.potentiallyHazardous}"/>
+            app:statusIcon="@{asteroid.potentiallyHazardous}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -5,7 +5,7 @@ import androidx.room.*
 import com.udacity.asteroidradar.models.Asteroid
 
 @Dao
-interface AsteroidDao{
+interface AsteroidDao {
     @Insert
     suspend fun insert(night: Asteroid)
 
@@ -25,10 +25,10 @@ interface AsteroidDao{
     fun getAsteroids(): LiveData<List<Asteroid>>
 
     @Query("SELECT * FROM asteroid WHERE close_approach_date = :today")
-    fun getTodayAsteroids(today : String): LiveData<List<Asteroid>>
+    fun getTodayAsteroids(today: String): LiveData<List<Asteroid>>
 
     @Query("DELETE FROM asteroid WHERE close_approach_date NOT IN (:actualWeek)")
-    suspend fun deleteOldAsteroids(actualWeek :ArrayList<String>)
+    suspend fun deleteOldAsteroids(actualWeek: ArrayList<String>)
 
 
 }

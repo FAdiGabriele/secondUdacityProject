@@ -12,10 +12,10 @@ fun parseAsteroidsJsonResult(jsonResult: JSONObject): ArrayList<Asteroid> {
     val asteroidList = ArrayList<Asteroid>()
 
     val nextSevenDaysFormattedDates =
-        getNextSevenDaysFormattedDates()
+            getNextSevenDaysFormattedDates()
     for (formattedDate in nextSevenDaysFormattedDates) {
 
-        if(nearEarthObjectsJson.has(formattedDate)) {
+        if (nearEarthObjectsJson.has(formattedDate)) {
 
             val dateAsteroidJsonArray = nearEarthObjectsJson.getJSONArray(formattedDate)
             for (i in 0 until dateAsteroidJsonArray.length()) {
@@ -47,7 +47,7 @@ fun parseAsteroidsJsonResult(jsonResult: JSONObject): ArrayList<Asteroid> {
     return asteroidList
 }
 
-/*The private access modifier has been removed because I  use this method to get the formatted week
+/*The private access modifier has been removed because I use this method to get the formatted week
  that is used to check that all old asteroids are removed from caching*/
 
 fun getNextSevenDaysFormattedDates(): ArrayList<String> {

@@ -1,6 +1,7 @@
 package com.udacity.asteroidradar.main
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
 import com.udacity.asteroidradar.api.NASAApi.retrofitPictureService
 import com.udacity.asteroidradar.database.getDatabase
@@ -17,8 +18,8 @@ class MainViewModel(application : Application) : AndroidViewModel(application) {
     private val db = getDatabase(application)
     private val asteroidsRepository = AsteroidsRepository(db)
 
-    private var _pictureResponse = MutableLiveData<String>()
-    val pictureResponse : LiveData<String>
+    private var _pictureResponse = MutableLiveData<PictureOfDay>()
+    val pictureResponse : LiveData<PictureOfDay>
         get() = _pictureResponse
 
     private var _asteroidsResponse = MutableLiveData<List<Asteroid>>()
@@ -28,11 +29,11 @@ class MainViewModel(application : Application) : AndroidViewModel(application) {
     fun getPictureOfTheDay() {
         retrofitPictureService.getPicturesOfTheDay().enqueue( object: Callback<PictureOfDay> {
             override fun onFailure(call: Call<PictureOfDay>, t: Throwable) {
-                _pictureResponse.value = "Failure: " + t.message
+                Log.e("Picture_error","Failure: " + t.message)
             }
 
             override fun onResponse(call: Call<PictureOfDay>, response: Response<PictureOfDay>) {
-                _pictureResponse.value = response.body()?.url
+                _pictureResponse.value = response.body()
             }
         })
     }

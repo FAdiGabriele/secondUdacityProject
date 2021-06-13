@@ -8,4 +8,17 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="BlankText">
+        <item name="android:textColor">@color/default_text_color</item>
+    </style>
+
+    <style name="StandardBlankText" parent="BlankText">
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="TitleBlankText" parent="BlankText">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/TitleTextSize</item>
+    </style>
+
 </resources>

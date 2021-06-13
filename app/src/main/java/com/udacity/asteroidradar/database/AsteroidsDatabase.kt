@@ -19,8 +19,8 @@ fun getDatabase(context: Context): AsteroidsDatabase {
     synchronized(AsteroidsDatabase::class.java) {
         if (!::INSTANCE.isInitialized) {
             INSTANCE = Room.databaseBuilder(context.applicationContext,
-                AsteroidsDatabase::class.java,
-                "asteroids").build()
+                    AsteroidsDatabase::class.java,
+                    "asteroids").build()
         }
     }
     return INSTANCE

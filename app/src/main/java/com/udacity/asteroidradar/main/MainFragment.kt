@@ -34,7 +34,6 @@ class MainFragment : Fragment() {
 
     private lateinit var binding: FragmentMainBinding
 
-
     private val viewModel: MainViewModel by lazy {
         ViewModelProvider(this).get(MainViewModel::class.java)
     }
@@ -73,10 +72,12 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.pictureResponse.observe(viewLifecycleOwner, Observer { responseValue ->
-            if (responseValue.isBlank() || responseValue.contains("Failure: ")) {
+            if (responseValue == null) {
                 Toast.makeText(requireContext(), resources.getString(R.string.image_of_the_day_not_loaded), Toast.LENGTH_LONG).show()
+                binding.activityMainImageOfTheDay.contentDescription= resources.getString(R.string.this_is_nasa_s_picture_of_day_showing_nothing_yet)
             } else {
-                Picasso.get().load(responseValue).into(binding.activityMainImageOfTheDay)
+                Picasso.get().load(responseValue.url).into(binding.activityMainImageOfTheDay)
+                binding.activityMainImageOfTheDay.contentDescription= String.format(resources.getString(R.string.nasa_picture_of_day_content_description_format), responseValue.title )
             }
         })
 

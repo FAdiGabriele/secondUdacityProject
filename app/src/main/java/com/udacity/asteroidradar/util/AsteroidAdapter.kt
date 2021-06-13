@@ -9,12 +9,12 @@ import com.udacity.asteroidradar.models.Asteroid
 import com.udacity.asteroidradar.databinding.SingleAsteroidElementBinding
 
 class AsteroidAdapter(val clickListener: AsteroidListener) : ListAdapter<Asteroid, AsteroidAdapter.AsteroidHolder>(
-    AsteroidDiffCallback()
+        AsteroidDiffCallback()
 ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AsteroidHolder {
         return AsteroidHolder.from(
-            parent
+                parent
         )
     }
 
@@ -36,9 +36,9 @@ class AsteroidAdapter(val clickListener: AsteroidListener) : ListAdapter<Asteroi
         companion object {
             fun from(parent: ViewGroup): AsteroidHolder {
                 val binding = SingleAsteroidElementBinding
-                                .inflate(LayoutInflater.from(parent.context), parent, false)
+                        .inflate(LayoutInflater.from(parent.context), parent, false)
                 return AsteroidHolder(
-                    binding
+                        binding
                 )
             }
         }
