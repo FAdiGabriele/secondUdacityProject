@@ -76,11 +76,11 @@ class MainFragment : Fragment() {
             if (responseValue == null || !responseValue.mediaType.contains("image")) {
                 binding.statusLoadingWheel.visibility = View.GONE
                 Toast.makeText(requireContext(), resources.getString(R.string.image_of_the_day_not_loaded), Toast.LENGTH_SHORT).show()
-                binding.activityMainImageOfTheDay.contentDescription= resources.getString(R.string.this_is_nasa_s_picture_of_day_showing_nothing_yet)
+                binding.activityMainImageOfTheDay.contentDescription = resources.getString(R.string.this_is_nasa_s_picture_of_day_showing_nothing_yet)
             } else {
                 Picasso.get().load(responseValue.url).into(binding.activityMainImageOfTheDay)
                 binding.statusLoadingWheel.visibility = View.GONE
-                binding.activityMainImageOfTheDay.contentDescription= String.format(resources.getString(R.string.nasa_picture_of_day_content_description_format), responseValue.title )
+                binding.activityMainImageOfTheDay.contentDescription = String.format(resources.getString(R.string.nasa_picture_of_day_content_description_format), responseValue.title)
             }
         })
 
@@ -99,11 +99,11 @@ class MainFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.show_today_asteroids->{
+        when (item.itemId) {
+            R.id.show_today_asteroids -> {
                 viewModel.getDailyAsteroids()
             }
-            R.id.show_week_asteroids->{
+            R.id.show_week_asteroids -> {
                 viewModel.getWeeklyAsteroids()
             }
         }
