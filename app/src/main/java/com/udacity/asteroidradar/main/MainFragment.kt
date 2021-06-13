@@ -63,6 +63,7 @@ class MainFragment : Fragment() {
         ))
 
         binding.statusLoadingWheel.visibility = View.VISIBLE
+
         binding.asteroidRecycler.adapter = adapter
         setHasOptionsMenu(true)
 
