@@ -1,19 +1,34 @@
 package com.udacity.asteroidradar.main
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.squareup.picasso.Picasso
-import com.udacity.asteroidradar.models.Asteroid
 import com.udacity.asteroidradar.R
-import com.udacity.asteroidradar.database.getDatabase
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
+import com.udacity.asteroidradar.models.Asteroid
 import com.udacity.asteroidradar.util.AsteroidAdapter
 import com.udacity.asteroidradar.util.AsteroidListener
+import com.udacity.asteroidradar.util.Constants.DEFAULT_FAKE_VALUE
+import com.udacity.asteroidradar.util.Constants.FAKE1_CODENAME
+import com.udacity.asteroidradar.util.Constants.FAKE1_DATE
+import com.udacity.asteroidradar.util.Constants.FAKE1_ID
+import com.udacity.asteroidradar.util.Constants.FAKE2_CODENAME
+import com.udacity.asteroidradar.util.Constants.FAKE2_DATE
+import com.udacity.asteroidradar.util.Constants.FAKE2_ID
+import com.udacity.asteroidradar.util.Constants.FAKE3_CODENAME
+import com.udacity.asteroidradar.util.Constants.FAKE3_DATE
+import com.udacity.asteroidradar.util.Constants.FAKE3_ID
+import com.udacity.asteroidradar.util.Constants.FAKE4_CODENAME
+import com.udacity.asteroidradar.util.Constants.FAKE4_DATE
+import com.udacity.asteroidradar.util.Constants.FAKE4_ID
+import com.udacity.asteroidradar.util.Constants.FAKE5_CODENAME
+import com.udacity.asteroidradar.util.Constants.FAKE5_DATE
+import com.udacity.asteroidradar.util.Constants.FAKE5_ID
 
 class MainFragment : Fragment() {
 
@@ -26,19 +41,27 @@ class MainFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        binding = FragmentMainBinding.inflate(inflater,container,false)
+        binding = FragmentMainBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
 
         binding.viewModel = viewModel
         viewModel.getPictureOfTheDay()
 
-        val adapter = AsteroidAdapter(AsteroidListener{ asteroid ->
+        val adapter = AsteroidAdapter(AsteroidListener { asteroid ->
             val args = Bundle()
             args.putParcelable("selectedAsteroid", asteroid)
             findNavController().navigate(R.id.action_showDetail, args)
         })
-        //TODO: aggiorna con i valori presi dalla cache
-        adapter.submitList(listOf())
+
+        /* This is a list of 5 fake asteroids that are shown before is loaded data from cache
+         or data is missing and it needs to download from API */
+        adapter.submitList(listOf(
+                Asteroid(FAKE1_ID, FAKE1_CODENAME, FAKE1_DATE, DEFAULT_FAKE_VALUE, DEFAULT_FAKE_VALUE, DEFAULT_FAKE_VALUE, DEFAULT_FAKE_VALUE, true),
+                Asteroid(FAKE2_ID, FAKE2_CODENAME, FAKE2_DATE, DEFAULT_FAKE_VALUE, DEFAULT_FAKE_VALUE, DEFAULT_FAKE_VALUE, DEFAULT_FAKE_VALUE, false),
+                Asteroid(FAKE3_ID, FAKE3_CODENAME, FAKE3_DATE, DEFAULT_FAKE_VALUE, DEFAULT_FAKE_VALUE, DEFAULT_FAKE_VALUE, DEFAULT_FAKE_VALUE, true),
+                Asteroid(FAKE4_ID, FAKE4_CODENAME, FAKE4_DATE, DEFAULT_FAKE_VALUE, DEFAULT_FAKE_VALUE, DEFAULT_FAKE_VALUE, DEFAULT_FAKE_VALUE, false),
+                Asteroid(FAKE5_ID, FAKE5_CODENAME, FAKE5_DATE, DEFAULT_FAKE_VALUE, DEFAULT_FAKE_VALUE, DEFAULT_FAKE_VALUE, DEFAULT_FAKE_VALUE, false)
+        ))
 
         binding.asteroidRecycler.adapter = adapter
         setHasOptionsMenu(true)
@@ -49,19 +72,19 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.pictureResponse.observe(viewLifecycleOwner, Observer {responseValue ->
-            if(responseValue.isBlank() || responseValue.contains("Failure: ")){
-                Log.e("mimmo", "nn img qui")
-            }else{
-                    Picasso.get().load(responseValue).into(binding.activityMainImageOfTheDay)
+        viewModel.pictureResponse.observe(viewLifecycleOwner, Observer { responseValue ->
+            if (responseValue.isBlank() || responseValue.contains("Failure: ")) {
+                Toast.makeText(requireContext(), resources.getString(R.string.image_of_the_day_not_loaded), Toast.LENGTH_LONG).show()
+            } else {
+                Picasso.get().load(responseValue).into(binding.activityMainImageOfTheDay)
             }
         })
 
-        viewModel.asteroidsResponse.observe(viewLifecycleOwner, Observer {responseValue ->
-            if(responseValue.isNullOrEmpty()){
-                Log.e("mimmo", "e niente")
-            }else{
-                    (binding.asteroidRecycler.adapter as AsteroidAdapter).submitList(responseValue)
+        viewModel.asteroidsResponse.observe(viewLifecycleOwner, Observer { responseValue ->
+            if (responseValue.isNullOrEmpty()) {
+                Toast.makeText(requireContext(), resources.getString(R.string.asteroid_list_not_loaded), Toast.LENGTH_LONG).show()
+            } else {
+                (binding.asteroidRecycler.adapter as AsteroidAdapter).submitList(responseValue)
             }
         })
     }
@@ -72,6 +95,7 @@ class MainFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        //TODO: set filters from menu
         return true
     }
 }

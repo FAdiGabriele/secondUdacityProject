@@ -19,6 +19,7 @@ class RefreshDataWorker(appContext: Context, params: WorkerParameters): Coroutin
 
         return try {
             repository.refreshAsteroids()
+            repository.deleteOldAsteroids()
             Result.success()
         } catch (e: HttpException) {
             Result.retry()

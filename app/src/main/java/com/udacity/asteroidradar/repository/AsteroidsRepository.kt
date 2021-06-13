@@ -1,26 +1,20 @@
 package com.udacity.asteroidradar.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.google.gson.Gson
 import com.udacity.asteroidradar.api.NASAApi
 import com.udacity.asteroidradar.database.AsteroidsDatabase
 import com.udacity.asteroidradar.models.Asteroid
-import com.udacity.asteroidradar.util.Constants
-import com.udacity.asteroidradar.util.getActualDateFormatted
-import com.udacity.asteroidradar.util.getNextSevenDaysDateFormatted
-import com.udacity.asteroidradar.util.parseAsteroidsJsonResult
+import com.udacity.asteroidradar.util.*
+import com.udacity.asteroidradar.util.getTheNextSeventhDayFormatted
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.await
 import kotlinx.coroutines.withContext as withContext
 
 class AsteroidsRepository(private val database: AsteroidsDatabase) {
@@ -30,7 +24,7 @@ class AsteroidsRepository(private val database: AsteroidsDatabase) {
 
     fun refreshAsteroids() {
 
-        val call = NASAApi.retrofitAsteroidsService.getAsteroids(getActualDateFormatted(), getNextSevenDaysDateFormatted(), Constants.API_KEY)
+        val call = NASAApi.retrofitAsteroidsService.getAsteroids(getActualDateFormatted(), getTheNextSeventhDayFormatted(), Constants.API_KEY)
 
             call.enqueue(object :Callback<Any>{
                 override fun onResponse(call: Call<Any>, response: Response<Any>) {
@@ -48,5 +42,14 @@ class AsteroidsRepository(private val database: AsteroidsDatabase) {
             database.asteroidDao.insertAllFromList(asteroidList)
         }
     }
+
+    suspend fun deleteOldAsteroids(){
+        withContext(Dispatchers.IO){
+            val actualWeek = getNextSevenDaysFormattedDates()
+            database.asteroidDao.deleteOldAsteroids(actualWeek)
+        }
+    }
+
+
 
 }

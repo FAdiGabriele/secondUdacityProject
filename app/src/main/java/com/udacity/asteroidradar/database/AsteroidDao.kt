@@ -18,14 +18,14 @@ interface AsteroidDao{
     @Update
     suspend fun update(night: Asteroid)
 
-    @Query("SELECT * from asteroid WHERE id = :key")
+    @Query("SELECT * FROM asteroid WHERE id = :key")
     suspend fun get(key: Long): Asteroid?
 
-    @Query("SELECT * from asteroid")
+    @Query("SELECT * FROM asteroid ORDER BY close_approach_date")
     fun getAsteroids(): LiveData<List<Asteroid>>
 
-    @Query("DELETE FROM asteroid WHERE close_approach_date ")
-    suspend fun clearOldAsteroid()
+    @Query("DELETE FROM asteroid WHERE close_approach_date NOT IN (:actualWeek)")
+    suspend fun deleteOldAsteroids(actualWeek :ArrayList<String>)
 
 
 }

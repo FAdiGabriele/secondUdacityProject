@@ -9,7 +9,7 @@ fun getActualDateFormatted() : String{
     return dateFormat.format(now)
 }
 
-fun getNextSevenDaysDateFormatted() : String{
+fun getTheNextSeventhDayFormatted() : String{
     val sevenDays = 1000*60*60*24*7
     val nextWeek = Date().time + sevenDays
     val dateFormat = SimpleDateFormat(Constants.API_QUERY_DATE_FORMAT, Locale.getDefault())
